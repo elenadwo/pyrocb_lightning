@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+
+# 18 - 23 utc june 15 2021
+# goes 17 
+
+#aws s3 cp s3://noaa-goes16/<Product>/<Year>/<Day of Year>/<Hour>/<Filename> . --no-sign-request
+
+website="s3://noaa-goes16/"
+product_cod="ABI-L2-CODC/"
+suffix=".nc4"
+
+yr=("2021")
+for year in "${yr[@]}" #loop over years
+do
+	doy=("166)	
+ 	echo $doy
+   	for day in "${doy[@]}" #loop over days
+  	do  
+		if [ $day == "166" ]
+		then
+			hour=("18" "19" "20" "21", "22", "23") 
+		
+		
+		fi
+		#hour=("00")
+		for h in "${hour[@]}" #loop over hours
+		do 
+			echo $year$day$h
+			mkdir $year$day$h
+			
+			#TODO: Change ABI-L2- bit to ABI-L2-CMIPF for the full disk brightness temperature data
+			aws s3 cp "s3://noaa-goes16/ABI-L2-MCMIPF/2021/"$day"/"$h $year$day$h --recursive --no-sign-request
+			
+			
+		done   
+   	done #end day loop
+done # end year loop 
